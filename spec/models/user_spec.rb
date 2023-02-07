@@ -25,4 +25,14 @@ RSpec.describe User, type: :model do
       it { is_expected.not_to be_valid }
     end
   end
+
+  describe 'associations' do
+    context 'followers' do
+      it { is_expected.to have_many(:followers) }
+    end
+
+    context 'followings' do
+      it { is_expected.to have_many(:followings) }
+    end
+  end
 end
