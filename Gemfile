@@ -50,11 +50,12 @@ gem "bootsnap", require: false
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri mingw x64_mingw ]
-  gem 'rspec-rails', '6.0.1'
-  gem 'shoulda', '~> 4.0'
+  gem "debug", platforms: %i[ mri mingw x64_mingw ]  
   gem "factory_bot", "~> 6.2"
-  gem 'factory_bot_rails'
+  gem 'factory_bot_rails'  
+  gem 'pry'
+  gem 'rspec-rails', '6.0.1'  
+  gem 'shoulda', '~> 4.0'
 end
 
 group :development do
@@ -69,3 +70,5 @@ group :development do
 end
 
 
+
+gem "rails-controller-testing", "~> 1.0", :groups => [:development, :test]
