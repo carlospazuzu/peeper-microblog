@@ -10,4 +10,6 @@ class User < ApplicationRecord
   validates :display_name, presence: true, length: { maximum: 30 }
   validates :bio, length: { maximum: 300 }
   validates :born_at, comparison: { less_than: Date.today - 13.years }
+
+  has_many :statuses
 end

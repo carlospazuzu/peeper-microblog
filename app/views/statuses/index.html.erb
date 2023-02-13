@@ -1,0 +1,6 @@
+<header>
+    <h1>Peeper Microblog</h1>
+    <%= link_to 'New Status', new_status_path %>
+</header>
+
+<%= render(@statuses) || 'no status' %>

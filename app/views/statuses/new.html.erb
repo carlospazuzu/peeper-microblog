@@ -1,0 +1,12 @@
+<h1><%= @parent_status_id.nil? ? 'New' : 'Replying' %> Status</h1>
+
+<% @status.errors.full_messages.each do |message| %>
+    <div><%= message %></div>
+<% end %>
+
+<%= render partial: 'form', locals: { status: @status, parent_status_id: @parent_status_id } %>
+
+
+
+
+

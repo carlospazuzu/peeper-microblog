@@ -1,0 +1,17 @@
+<div class="status">
+    <h4><%= status.user.display_name %> at <%= time_ago_in_words(status.updated_at) %></h4> 
+    <% if status.media.present? %>        
+        <% status.media.each do |medium| %>
+            <%= image_tag medium.url %>
+        <% end %>        
+    <% end %>    
+    <p><%= status.proper_body %></p>
+    <% if !defined?(nav_links) || nav_links %>
+        <nav>
+            <%= link_to 'Reply', new_status_path(parent_status_id: status.id)  %>
+            <%= link_to 'View', status_path(status.id) %>
+            <%= button_to 'Delete', destroy_status_path(status.id), method: 'delete' %>
+        </nav>
+    <% end %>
+    <%= render status.replies, nav_links: defined?(nav_links) && nav_links %>    
+</div>

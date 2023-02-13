@@ -10,10 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_02_233725) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_02_202903) do
+  create_table "media", force: :cascade do |t|
+    t.integer "kind"
+    t.string "url"
+    t.integer "status_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "follows", force: :cascade do |t|
     t.integer "follower_id"
     t.integer "following_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["status_id"], name: "index_media_on_status_id"
+  end
+
+  create_table "statuses", force: :cascade do |t|
+    t.text "body"
+    t.integer "user_id", null: false
+    t.integer "replied_to_status_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

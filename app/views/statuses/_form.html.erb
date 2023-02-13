@@ -1,0 +1,26 @@
+<% if parent_status_id.present? %>    
+    <%= render Status.find(parent_status_id), nav_links: false %>
+<% end %>
+
+<%= form_with model: status do |f| %>
+    <%= f.label 'User' %>
+    <%= f.select :user_id, User.all.map { |u| [u.display_name, u.id] } %>
+    <%= f.label 'Body' %>
+    <%= f.text_area :body, value: status.body %>
+    <% if parent_status_id %>
+        <%= f.hidden_field :replied_to_status_id, value: parent_status_id  %>
+    <% end %>
+    <%= f.label 'Media' %>
+    <ul>
+        <%= f.fields_for :media do |media_form| %>
+        <li>
+            <%= media_form.label 'Kind' %>
+            <%= media_form.select :kind, [['image', 0], ['video', 1]] %>
+            <%= media_form.text_field :url %>
+            <%= media_form.hidden_field :status_id, value: status.id %>
+        </li>
+        <% end %>
+    </ul>
+    
+    <%= f.submit %>
+<% end %>
