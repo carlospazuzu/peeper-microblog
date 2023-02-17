@@ -18,6 +18,15 @@ FactoryBot.define do
       replies { [association(:replied_status)] }
     end
 
+    factory :status_with_media do
+      transient do
+        medium_count { 2 }
+      end
+      after(:create) do |status, evaluator|
+        create_list(:medium, evaluator.medium_count, status: status)
+      end
+    end
+
     factory :replied_status, traits: [:with_reply]
     factory :status_with_long_body, traits: [:with_long_body]
   end
