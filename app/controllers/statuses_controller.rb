@@ -1,8 +1,13 @@
 class StatusesController < ApplicationController
   before_action :set_status, only: %i[edit update show destroy]
 
+  rescue_from ActiveRecord::RecordNotFound, with: :show_errors
+
   def index
-    @statuses = Status.where(replied_to_status_id: nil).includes(:user, :replies)
+    respond_to do |format|
+      format.html { @statuses = Status.where(replied_to_status_id: nil).includes(:user, :replies) }
+      format.json { @statuses = Status.includes(:user) }
+    end
   end
 
   def new
@@ -45,6 +50,13 @@ class StatusesController < ApplicationController
 
   def set_status
     @status = Status.find(params[:id])
+  end
+
+  def show_errors
+    respond_to do |format|
+      format.html { render file: "#{Rails.root}/public/404.html", layout: false }
+      format.json { render json: { 'error': 'Record not Found!' }, status: :not_found }
+    end
   end
 
   def status_params
