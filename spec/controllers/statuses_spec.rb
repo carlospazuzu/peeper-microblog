@@ -78,4 +78,54 @@ RSpec.describe StatusesController, type: :controller do
       end
     end
   end
+
+  describe 'GET show' do
+    render_views
+
+    it 'returns http success' do
+      get :show, params: { id: 1 }
+      expect(response).to have_http_status(:success)
+    end
+
+    context 'when requesting page as JSON' do
+      before { request.headers['Accept'] = 'application/json' }
+
+      it 'renders as JSON' do
+        get :show, params: { id: 1 }
+        expect(response.body).to be_json
+      end
+
+      context 'when database has no records' do
+        it 'returns an empty JSON object' do
+          get :show, params: { id: 1 }
+          expect(response.body).to be_json.with_content({})
+        end
+      end
+
+      context 'when database has saved status' do
+        let(:found_status) { build_stubbed(:status, body: 'Whatever...') }
+        let(:media) { build_stubbed(:medium) }
+        let(:media_att_status) { build_stubbed(:status, media: [media]) }
+
+        it 'fetches and shows the requested information' do
+          allow(Status).to receive(:find).with(found_status.id.to_s).and_return(found_status)
+          get :show, params: { id: found_status.id }
+          expect(response.body).to be_json.with_content('Whatever...').at_path('status.body')
+        end
+
+        it 'shows the amount of attached media in the status' do
+          allow(Status).to receive(:find).with(media_att_status.id.to_s).and_return(media_att_status)
+          get :show, params: { id: media_att_status.id }
+          expect(response.body).to be_json.with_content(1).at_path('status.media')
+        end
+      end
+
+      context 'when non-existent id is passed' do
+        it 'returns a 404 error' do
+          get :show, params: { id: -1 }
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+  end
 end
